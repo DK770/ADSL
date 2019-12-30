@@ -1,15 +1,16 @@
 //============================================================================
 // Name        : prac1.cpp
-// Author      : 
+// Author      : dhruv kanekal
 // Version     :
 // Copyright   : Your copyright notice
 // Description : Hello World in C++, Ansi-style
 //============================================================================
+//
 //Given binary tree with n nodes and perform following operations on it.
 //a) Assign this tree to another [operator=] *
 //b) Erase all nodes in a binary tree *
 //c) Create a mirror image of the tree *
-//d) Check two binary trees are equal or not
+//d) Check two binary trees are equal or not *
 //e) Inorder, Preorder, Postorder traversal of tree(recursive and non-recursive) *
 //f) Print internal and leaf nodes *
 
@@ -46,6 +47,7 @@ class tree
 	void postleaf(node*);
 	void postinternal(node*);
 	int check(node*,node*);
+	void copy(node*, node*);
 
 public:
 	tree()
@@ -79,7 +81,7 @@ public:
 		inorder(root);
 		cout<<"\nPostorder form:-\n";
 		postorder(root);
-		cout<<"By non-recursive method-";
+		cout<<"\nBy non-recursive method-";
 		cout<<"\nPreorder form:-\n";
 		nonrecpre(root);
 		cout<<"\nInorder form:-\n";
@@ -100,17 +102,17 @@ public:
 	}
 	void internalnode()
 	{
-		cout<<"Internal nodes are:-\n";
+		cout<<"\nInternal nodes are:-\n";
 		postinternal(root);
 	}
-	void checkcall(tree* t1)
+	void checkcall(tree t1)
 	{
 		int i;
-		i=check(this->root,t1->root);
+		i=check(this->root,t1.root);
 		if(i)
 			cout<<"\nThe given binary trees are not equal.\n";
 		else
-			cout<<"\nthe given binary trees are equal.\n";
+			cout<<"\nThe given binary trees are equal.\n";
 	}
 	void operator =(tree);
 
@@ -149,11 +151,11 @@ node* tree::maketree()
 	temp->rchild=NULL;
 	cout<<"Enter data:-\t";
 	cin>>temp->data;
-	cout<<"Enter left child?(y/n)\t";
+	cout<<"Enter left child of "<<temp->data<<" ?(y/n)\t";
 	cin>>ch;
 	if(ch=='y')
 		temp->lchild=maketree();
-	cout<<"Enter right child?(y/n)\t";
+	cout<<"Enter right child of "<<temp->data<<" ?(y/n)\t";
 	cin>>ch;
 	if(ch=='y')
 		temp->rchild=maketree();
@@ -209,7 +211,7 @@ void tree::nonrecpre(node* t)
 	{
 		while(t!=NULL)
 		{
-			cout<<"t->data"<<"  ";
+			cout<<t->data<<"  ";
 			if(t->rchild!=NULL)
 			{
 				i=i+1;
@@ -309,22 +311,85 @@ void tree::postinternal(node *t)
 void tree::operator =(tree t)
 {
 	cout<<"\nCopying tree to other object ...\n";
-	root=t.root;
+	root=new node;
+	copy(root,t.root);
 	cout<<"Copy over.\n";
+}
+
+void tree::copy(node *cpy, node *orig)
+{
+	cpy->data=orig->data;
+	if(orig->lchild)
+	{
+		cpy->lchild=new node;
+		cpy->lchild->data=orig->lchild->data;
+		copy(cpy->lchild, orig->lchild);
+	}
+	if(orig->rchild)
+	{
+		cpy->rchild=new node;
+		cpy->rchild->data=orig->rchild->data;
+		copy(cpy->rchild, orig->rchild);
+	}
+	return;
+}
+
+void menu()
+{
+	cout<<"1.Display Menu."<<endl;
+	cout<<"2.Create Binary Tree."<<endl;
+	cout<<"3.Display Binary Tree."<<endl;
+	cout<<"4.Copy Tree into Another Variable"<<endl;
+	cout<<"5.Display Internal Nodes."<<endl;
+	cout<<"6.Display Leaf Nodes."<<endl;
+	cout<<"7.Create Mirror Image of Binary Tree."<<endl;
+	cout<<"8.Check If 2 Binary Trees Are Equal."<<endl;
+	cout<<"9.Delete Tree."<<endl;
+	cout<<"10.exit."<<endl;
 }
 
 int main()
 {
-	tree T1,T2;
-	T1.create();
-	T1.display();
-	T2=T1;
-	T2.display();
-//	T1.treedelete();
-//	T2.display();
-	T1.mirror();
-	T2.leafnode();
-	T2.internalnode();
-
+	tree T1,T2,T3;
+	int choice;
+	cout<<"\tMENU:-\n";
+	menu();
+	do
+	{
+		switch(choice)
+		{
+			case 1:
+				menu();
+				break;
+			case 2:
+				T1.create();
+				break;
+			case 3:
+				T1.display();
+				break;
+			case 4:
+				T2=T1;
+				T2.display();
+				break;
+			case 5:
+				T2.internalnode();
+				break;
+			case 6:
+				T2.leafnode();
+				break;
+			case 7:
+				T2.mirror();
+				break;
+			case 8:
+				T1.checkcall(T2);
+				break;
+			case 9:
+				T1.treedelete();
+				break;
+			case 10:
+				cout<<"\tThank You.\n";
+				break;
+		}
+	}while(choice!=10);
 	return 0;
 }
