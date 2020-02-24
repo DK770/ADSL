@@ -32,8 +32,12 @@ class dictionary
 	word w[26][2];
 public:
 	void input();
+	void inputrepl();
 	void output();
 	int hashfunc(char);
+	void insert();
+	void insertrepl();
+	void deleteentry();
 };
 
 void dictionary::input()
@@ -66,7 +70,8 @@ void dictionary::input()
 			{
 				if (addr==25)
 					addr=0;
-				addr++;
+				else
+					addr++;
 				if(w[addr][0].key=="\0")
 				{
 					w[addr][0].key=s;
@@ -97,9 +102,84 @@ int dictionary::hashfunc(char c)
 	return i;
 }
 
+void dictionary::output()
+{
+	int i;
+	for(i=0;i<26;i++)
+	{
+		if(w[i][0].key!=" ")
+			cout<<"\n"<<w[i][0].key<<" - "<<w[i][0].value;
+		if(w[i][1].key!=" ")
+			cout<<"\n"<<w[i][1].key<<" - "<<w[i][1].value;
+		cout<<endl;
+	}
+}
+
+void dictionary::deleteentry()
+{
+	string s;
+	cout<<"\nEnter the keyword which is to be deleted:-\t";
+	cin>>s;
+	int add=hashfunc(s[0]);
+	do
+	{
+		if(w[add][0].key==s)
+		{
+			w[add][0].key="\0";
+			w[add][0].value="\0";
+			return;
+		}
+		if(w[add][1].key==s)
+		{
+			w[add][0].key="\0";
+			w[add][0].value="\0";
+			return;
+		}
+		add++;
+		if(add==25)
+			add=0;
+		}
+		while(add!=hashfunc(s[0]));
+}
+
 int main() {
 	dictionary d1;
 	d1.input();
-	//d1.output();
+	d1.output();
 	return 0;
+
+	/* dictionary d;
+	int ch;
+	cout<<"\nEnter \n0 to exit\n1 for input without replacement\n2 for input with replacement\n3 for output \n4 for insert without replacement \n5 for insert with replacement \n6 for search\n7 for delete";
+	do
+	{
+		cout<<"\nEnter your choice ";
+		cin>>ch;
+		switch(ch)
+		{
+		case 1:
+			d.input();
+			break;
+		case 2:
+			d.winput();
+			break;
+		case 3:
+			d.output();
+			break;
+		case 4:
+			d.insert();
+			break;
+		case 5:
+			d.winsert();
+			break;
+		case 6:
+			d.search();
+			break;
+		case 7:
+			d.deletee();
+			break;
+		}
+	}
+	while(ch); */
+
 }
